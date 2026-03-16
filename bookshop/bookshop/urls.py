@@ -4,9 +4,17 @@ from django.urls import path
 from ecom.views import *
 from django.conf import settings
 from django.conf.urls.static import static
+from ecom.adminView import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('superadmin/', admin.site.urls),
+    # admin pages
+    path("admin/", dashboard, name="admin_index"),
+    path("admin/genere", manageGenere, name="admin_manage_genere"),
+    path("admin/author", manageAuthor, name="admin_manage_author"),
+    path("admin/book", manageBooks, name="admin_manage_book"),
+
+    # homepage
     path("", homepage, name="homepage"),
     path("filter/", filter, name="filter"),
     path("book-view/",book_view, name="book_view")

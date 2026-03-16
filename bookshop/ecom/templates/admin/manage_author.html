@@ -1,0 +1,31 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+    <div class="flex flex-1">
+        <div class="flex w-9/12 flex-col">
+            <h2 class="space-y-3 font-semibold text-2xl ">Manage Author ()</h2>
+            <table class="w-full border mt-5">
+                <thead>
+                    <tr>
+                        <th class="border">Id</th>
+                        <th class="border">Name</th>
+                        <th class="border">No of Books</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for author in authors %}
+                        <tr>
+                            <td class="border p-3">{{author.id}}</td>
+                            <td class="border p-3">{{author.name}}</td>
+                            <td class="border p-3">{{author.authors.count}}</td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        </div>
+        <div class="flex w-3/12">
+            <h2 class="space-y-3 font-semibold text-2xl ">Insert Author</h2>
+            
+        </div>
+    </div>
+
+{% endblock content %}
