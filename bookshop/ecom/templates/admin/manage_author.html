@@ -1,7 +1,8 @@
 {% extends "admin/admin_base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="flex flex-1">
+    <div class="flex flex-1 gap-5">
         <div class="flex w-9/12 flex-col">
             <h2 class="space-y-3 font-semibold text-2xl ">Manage Author ()</h2>
             <table class="w-full border mt-5">
@@ -22,8 +23,15 @@
                     {% endfor %}
             </table>
         </div>
-        <div class="flex w-3/12">
-            <h2 class="space-y-3 font-semibold text-2xl ">Insert Author</h2>
+        <div class="flex w-3/12 flex-col">
+            <h2 class="space-y-3 font-semibold text-2xl">Insert Author</h2>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+
+                <button type="submit" class="bg-purple-700 text-white px-3 py-2 rounded mt-5">Add Author</button>
+            </form>
             
         </div>
     </div>
