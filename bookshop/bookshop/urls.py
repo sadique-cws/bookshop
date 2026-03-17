@@ -18,6 +18,6 @@ urlpatterns = [
     # homepage
     path("", homepage, name="homepage"),
     path("filter/", filter, name="filter"),
-    path("filter/<slug:slug>", filter, name="category_filter"),
-    path("book-view/",book_view, name="book_view")
+    path("filter/<slug:slug>/", filter, name="category_filter"),
+    path("book-view/<slug:slug>/",book_view, name="book_view")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

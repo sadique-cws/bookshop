@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import *
+import re 
 
 # Create your views here.
 
@@ -14,6 +15,19 @@ def homepage(req):
 def filter(req, slug=None):
     if slug is None:
         search_query = req.GET.get("search", "")
+        if search_query:
+            # if search query is isbn no then direct open book view page
+            if re.match(r"^[0-9]{10}(\d{3})?$", search_query):
+                try:
+                    book = Book.objects.get(isbn=search_query)
+                    return render(req, "book_view.html", {
+                        "book": book,
+                        "generes": Genere.objects.all(),
+                        "related_books": Book.objects.filter(genere=book.genere).exclude(slug=book.slug)[:6]
+                    })
+                except Book.DoesNotExist:
+                    pass 
+            
         data = {
             "generes":Genere.objects.all(),
             "books":Book.objects.filter(title__icontains=search_query),
@@ -29,4 +43,8 @@ def filter(req, slug=None):
         return render(req, "filter.html", data)
 
 def book_view(req, slug):
-    pass 
+    return render(req, "book_view.html", {
+        "book": Book.objects.get(slug=slug),
+        "generes": Genere.objects.all(),
+        "related_books": Book.objects.filter(genere=Book.objects.get(slug=slug).genere).exclude(slug=slug)[:6]
+    })

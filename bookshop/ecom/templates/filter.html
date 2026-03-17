@@ -14,6 +14,7 @@
         <div class="grid grid-cols-6">
             <!-- product card -->
             {% for book in books %}
+                <a href="{% url 'book_view' book.slug %}">
 
                 <div class="bg-slate-50 border-l border-slate-200">
                     <img src="{{book.cover_image.url}}" class="w-full" alt="">
@@ -23,6 +24,7 @@
                         <p class="text-lg font-semibold text-purple-700 mt-2">₹{{book.price}}</p>
                     </div>
                 </div>
+                </a>
             {% endfor %}
         </div>
     </div>
