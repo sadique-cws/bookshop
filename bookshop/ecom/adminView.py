@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from ecom.models import *
 from ecom.forms import * 
+from django.core.paginator import Paginator
 
 def dashboard(req):
     return render(req, "admin/dashboard.html") 
@@ -8,8 +9,14 @@ def dashboard(req):
 
 def manageGenere(req):
     data = {}
-    form = GenereForm(req.POST or None)
-    data["generes"] = Genere.objects.all()
+    form = GenereForm(req.POST or None) 
+    generes = Genere.objects.all()
+
+    # pagination work
+    paginator = Paginator(generes, 10)
+    page_number = req.GET.get("page")
+    generes_obj = paginator.get_page(page_number)
+    data["generes"] = generes_obj
     data["form"] = form
 
     if req.method == "POST":
@@ -36,13 +43,27 @@ def insertBook(req):
 
 def manageBooks(req):
     data = {}
-    data["books"] = Book.objects.all()
+    
+    books = Book.objects.all()
+    # pagination work
+    paginator = Paginator(books, 5)
+    page_number = req.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
+    data["books"] = page_obj
     return render(req,"admin/manage_book.html",data)
 
 def manageAuthor(req):
     data = {}
     form = AuthorForm(req.POST or None)
-    data["authors"] = Author.objects.all()
+    authors = Author.objects.all()
+
+    #pagination work
+
+    paginator = Paginator(authors, 10)
+    page_number = req.GET.get("page")
+    author_obj = paginator.get_page(page_number)
+    data["authors"] = author_obj
     data["form"] = form
 
     if req.method == "POST":
