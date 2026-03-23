@@ -5,6 +5,8 @@ from ecom.views import *
 from django.conf import settings
 from django.conf.urls.static import static
 from ecom.adminView import *
+from ecom.authview import *
+
 
 urlpatterns = [
     path('superadmin/', admin.site.urls),
@@ -19,5 +21,11 @@ urlpatterns = [
     path("", homepage, name="homepage"),
     path("filter/", filter, name="filter"),
     path("filter/<slug:slug>/", filter, name="category_filter"),
-    path("book-view/<slug:slug>/",book_view, name="book_view")
+    path("book-view/<slug:slug>/",book_view, name="book_view"),
+
+    # auth pages
+    path("auth/login/", login, name="login"),
+    path("auth/register/", register, name="register"),
+    path("auth/logout/", logout, name="logout")
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
