@@ -29,8 +29,8 @@
                             <td class="border p-3"><img src="{{book.cover_image.url}}" alt="" class="w-10"></td>
                             <td class="border p-3">{{book.isbn}}</td>
                             <td class="border p-3">
-                                <a href="" class="px-2 py-1 bg-blue-600 text-white rounded">Edit</a>
-                                <a href="" class="px-2 py-1 bg-red-600 text-white rounded">Delete</a>
+                                <a href="{% url 'admin_edit_book' book.id %}" class="px-2 py-1 bg-blue-600 text-white rounded">Edit</a>
+                                <a href="{% url 'admin_delete_book' book.id %}" class="px-2 py-1 bg-red-600 text-white rounded">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}

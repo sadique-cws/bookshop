@@ -62,6 +62,61 @@ def manageBooks(req):
 
 
 @staff_member_required(login_url="login")
+def editBook(req, id):
+    book = Book.objects.get(id=id)
+    form = BookForm(req.POST or None, instance=book)
+
+    if req.method == "POST":
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.slug = data.title.lower().replace(" ", "-")
+            data.save()
+            return redirect("admin_manage_book")
+    return render(req, "admin/edit_book.html",{"form":form}) 
+
+@staff_member_required(login_url="login")
+def editGenere(req, id):
+    genere = Genere.objects.get(id=id)
+    form = GenereForm(req.POST or None, instance=genere)
+
+    if req.method == "POST":
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.slug = data.title.lower().replace(" ", "-")
+            data.save()
+            return redirect("admin_manage_genere")
+    return render(req, "admin/edit_genere.html",{"form": form})
+
+@staff_member_required(login_url="login")
+def editAuthor(req, id):
+    author = Author.objects.get(id=id)
+    form = AuthorForm(req.POST or None, instance=author)
+
+    if req.method == "POST":
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.slug = data.name.lower().replace(" ", "-")
+            data.save()
+            return redirect("admin_manage_author")
+    return render(req, "admin/edit_author.html", {"form":form})
+
+
+@staff_member_required(login_url="login")
+def deleteGenere(req, id):
+    Genere.objects.get(id=id).delete()
+    return redirect("admin_manage_genere") 
+
+@staff_member_required(login_url="login")
+def deleteAuthor(req, id):
+    Author.objects.get(id=id).delete()
+    return redirect("admin_manage_author") 
+
+@staff_member_required(login_url="login")
+def deleteBook(req, id):
+    Book.objects.get(id=id).delete()
+    return redirect("admin_manage_book") 
+
+@staff_member_required(login_url="login")
 def manageAuthor(req):
     data = {}
     form = AuthorForm(req.POST or None)
