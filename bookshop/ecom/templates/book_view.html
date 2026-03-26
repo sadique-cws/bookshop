@@ -48,7 +48,7 @@
                     <!-- buy now button -->
                     <button class="px-6 text-xl bg-purple-700 text-white py-2 mt-5">Buy Now</button>
                     <!-- add to cart  -->
-                    <button class="px-6 text-xl bg-slate-200 text-slate-800 py-2 mt-5">Add to Cart</button>
+                    <a href="{% url 'add_to_cart' book.slug %}" class="px-6 text-xl bg-slate-200 text-slate-800 py-2 mt-5">Add to Cart</a>
                 </div> 
         </div>
 

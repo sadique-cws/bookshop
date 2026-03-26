@@ -48,3 +48,6 @@ def book_view(req, slug):
         "generes": Genere.objects.all(),
         "related_books": Book.objects.filter(genere=Book.objects.get(slug=slug).genere).exclude(slug=slug)[:6]
     })
+
+def cart(req):
+    return render(req, "cart.html")
