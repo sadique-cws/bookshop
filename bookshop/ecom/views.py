@@ -50,4 +50,6 @@ def book_view(req, slug):
     })
 
 def cart(req):
-    return render(req, "cart.html")
+    cart_items = OrderItem.objects.filter(order_id__user_id=req.user, order_id__payment_id=None)
+    order = Order.objects.get(user_id=req.user, payment_id=None)
+    return render(req, "cart.html",{"cart_items":cart_items, "order":order})   

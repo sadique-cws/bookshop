@@ -84,7 +84,32 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.user_id.username} - {self.total_price}"
+
+    def get_total_price(self):
+        # round figure
+        # error type NoneType doesn't define __round__ method becourse some product have discount None
+        total_price = 0
+        for item in self.order_items.all():
+            if item.book_id.discount_price:
+                total_price += item.book_id.discount_price * item.quantity
+            else:
+                total_price += item.book_id.price * item.quantity
+        return round(total_price, 1)
     
+
+    def get_shipping_charge(self):
+        if self.get_total_price() < 500:
+            return 45
+        else:
+            return 0
+
+    def get_tax_price(self):
+        return round(self.get_total_price() * 0.18, 0)
+
+    def get_total_payable_price(self):
+        return self.get_total_price() + self.get_shipping_charge() + self.get_tax_price()
+
+
 class OrderItem(models.Model):
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_items")
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
