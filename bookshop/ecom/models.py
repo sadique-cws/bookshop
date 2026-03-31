@@ -105,9 +105,15 @@ class Order(models.Model):
 
     def get_tax_price(self):
         return round(self.get_total_price() * 0.18, 0)
+    
+    def get_discount_amount(self):
+        if self.coupon_id:
+            return self.coupon_id.discount_amount
+        else:
+            return 0
 
     def get_total_payable_price(self):
-        return self.get_total_price() + self.get_shipping_charge() + self.get_tax_price()
+        return self.get_total_price() + self.get_shipping_charge() + self.get_tax_price() - self.get_discount_amount()
 
 
 class OrderItem(models.Model):

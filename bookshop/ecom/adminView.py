@@ -156,3 +156,38 @@ def manageAuthor(req):
             data.save()
             return redirect("admin_manage_author")
     return render(req, "admin/manage_author.html",data)
+
+@superuser_required
+def manageCoupons(req):
+    data = {}
+    form = CouponForm(req.POST or None)
+    coupons = Coupon.objects.all()
+
+    #pagination work
+
+    paginator = Paginator(coupons, 10)
+    page_number = req.GET.get("page")
+    coupon_obj = paginator.get_page(page_number)
+    data["coupons"] = coupon_obj
+    data["form"] = form
+
+    if req.method == "POST":
+        if form.is_valid():
+            form.save()
+            return redirect("admin_manage_coupon")
+    return render(req, "admin/manage_coupons.html",data)
+
+@superuser_required
+def editCoupon(req, id):
+    coupon = Coupon.objects.get(id=id)
+    form = CouponForm(req.POST or None, instance=coupon)
+
+    if req.method == "POST":
+        if form.is_valid():
+            form.save()
+            return redirect("admin_manage_coupon")
+    return render(req, "admin/edit_coupon.html", {"form":form})
+
+def deleteCoupon(req, id):
+    Coupon.objects.get(id=id).delete()
+    return redirect("admin_manage_coupon")

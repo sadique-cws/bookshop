@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Genere, Author, Book
+from .models import Genere, Author, Book, Coupon
 from django.contrib.auth.models import User
 
 
@@ -24,6 +24,18 @@ class BookForm(ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
+
+class CouponForm(ModelForm):
+    class Meta:
+        model = Coupon
+        # valid_from and valid_to fields should be in the form of date time picker. 
+        # so we will use widgets to make it a date time picker
+        widgets = {
+            "code": forms.TextInput(attrs={"placeholder": "Enter Coupon Code"}),
+            "valid_from": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "valid_to": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }
+        fields = ["code", "discount_amount", "valid_from", "valid_to","active"]
 
 class RegisterForm(ModelForm):
     class Meta:

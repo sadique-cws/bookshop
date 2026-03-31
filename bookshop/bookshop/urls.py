@@ -15,6 +15,11 @@ urlpatterns = [
     path("admin/genere", manageGenere, name="admin_manage_genere"),
     path("admin/genere/<int:id>/edit/", editGenere, name="admin_edit_genere"),
     path("admin/genere/<int:id>/delete/", deleteGenere, name="admin_delete_genere"),
+    
+    path("admin/coupon", manageCoupons, name="admin_manage_coupon"),
+    path("admin/coupon/<int:id>/edit/", editCoupon, name="admin_edit_coupon"),
+    path("admin/coupon/<int:id>/delete/", deleteCoupon, name="admin_delete_coupon"),
+    
     path("admin/author", manageAuthor, name="admin_manage_author"),
     path("admin/author/<int:id>/edit/", editAuthor, name="admin_edit_author"),
     path("admin/author/<int:id>/delete/", deleteAuthor, name="admin_delete_author"),
@@ -44,7 +49,6 @@ urlpatterns = [
     path("checkout/", checkout, name="checkout"),
     path("checkout/apply-coupon/", applyCoupon, name="apply_coupon"),
     path("checkout/remove-coupon/", removeCoupon, name="remove_coupon"),
-    path("checkout/check-coupon/", checkCoupon, name="check_coupon"),
 
 
     

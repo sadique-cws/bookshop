@@ -64,11 +64,34 @@
                 <span class="text-sm text-slate-500">Tax</span>
                 <span class="text-sm text-slate-500">₹{{ order.get_tax_price }}</span>
             </div>
+            <div class="flex justify-between text-green-600 font-semibold">
+                <span class="text-sm">Discount</span>
+                <span class="text-sm">₹{{ order.get_discount_amount }}</span>
+            </div>
             <div class="flex justify-between">
                 <span class="text-sm text-slate-500">Total</span>
                 <span class="text-sm text-slate-500">₹{{ order.get_total_payable_price }}</span>
             </div>
             <button class="w-full bg-blue-500 text-white py-2 rounded-md mt-5">Checkout</button>
+
+            {% if order.coupon_id %}
+
+                <div class="mt-5 p-3 bg-green-50 border border-green-200 rounded">
+                    <p class="text-sm text-green-600">Coupon Applied: <span class="font-medium">{{ order.coupon_id.code }}</span></p>
+                    <p class="text-sm text-green-600">Discount Amount: ₹{{ order.coupon_id.discount_amount }}</p>
+                    <a href="{% url 'remove_coupon' %}" class="text-red-500 text-sm">Remove Coupon</a>
+                </div>
+
+            {% else %}
+            {#  coupon  #}
+                <form action="{% url 'apply_coupon' %}" method="post" class="mt-5">
+                    {% csrf_token %}
+                    <div class="flex gap-2">
+                        <input type="text" name="code" placeholder="Enter Coupon Code" class="w-full border border-slate-200 rounded-md px-3 py-2">
+                        <button type="submit" class="bg-green-500 text-white px-3 py-2 rounded-md">Apply</button>
+                    </div>
+                </form>
+            {% endif %}
         </div>
 
     </div>

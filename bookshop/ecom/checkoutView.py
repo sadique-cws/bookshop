@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
 @login_required
@@ -75,12 +76,35 @@ def checkout(req):
 
 @login_required
 def applyCoupon(req):
-    pass
+    if req.method == "POST":
+        code = req.POST.get("code")
+        # now check code
+        print(timezone.now())
+        coupon_qs = Coupon.objects.filter(code=code, active=True)
+        if coupon_qs.exists():
+            coupon = coupon_qs[0]
+            # now check if user has an active order
+            order_qs = Order.objects.filter(user_id=req.user, payment_id=None)
+            if order_qs.exists():
+                order = order_qs[0]
+                order.coupon_id = coupon
+                order.save()
+                return redirect("cart")
+            else:
+                return redirect("cart") 
+        else:
+            # flash message that coupon is invalid
+            return redirect("cart")
+    else:
+        return redirect("cart")
 
 @login_required
 def removeCoupon(req):
-    pass
-
-@login_required
-def checkCoupon(req):
-    pass
+    order_qs = Order.objects.filter(user_id=req.user, payment_id=None)
+    if order_qs.exists():
+        order = order_qs[0]
+        order.coupon_id = None
+        order.save()
+        return redirect("cart")
+    else:
+        return redirect("cart")
