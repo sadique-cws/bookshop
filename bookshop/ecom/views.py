@@ -51,6 +51,10 @@ def book_view(req, slug):
 
 def cart(req):
     cart_items = OrderItem.objects.filter(order_id__user_id=req.user, order_id__payment_id=None)
-    order = Order.objects.get(user_id=req.user, payment_id=None)
+    order = Order.objects.filter(user_id=req.user, payment_id=None)
+
+    if order.exists():
+        order = order[0]
+
     generes = Genere.objects.all()
     return render(req, "cart.html",{"cart_items":cart_items, "order":order, "generes":generes})   

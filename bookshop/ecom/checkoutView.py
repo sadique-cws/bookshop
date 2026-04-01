@@ -15,6 +15,9 @@ def addToCart(req, slug):
         if order_qs.exists():
             # order item check krna hoga ki order me ye book pehle se h ya nhi
             order = order_qs[0]
+            # update total price 
+            order.total_price = order.get_total_payable_price()
+            order.save()
             order_item_qs = OrderItem.objects.filter(order_id=order, book_id=book)
             if order_item_qs.exists():
                 # agr order item me ye book pehle se h to quantity ko 1 se badha do
@@ -72,7 +75,49 @@ def minusFromCart(req, slug):
 
 @login_required
 def checkout(req):
-    pass 
+    order_qs = Order.objects.filter(user_id=req.user, payment_id=None)
+    if order_qs.exists():
+        order = order_qs[0]
+
+    if req.method == "POST":
+        address_id = req.POST.get("address")
+        payment_method = req.POST.get("payment_method")
+
+        # create payment object
+        payment = Payment.objects.create(
+            user_id=req.user,
+            amount=order.get_total_payable_price(),
+            payment_method=payment_method,
+            mode= (payment_method if payment_method != "cod" else "Cash on Delivery"),
+            trancation_id="",
+        )
+
+        order.payment_id = payment
+        order.address_id = Address.objects.get(id=address_id)
+        order.save()
+        return redirect("cart")
+          
+    order_qs = Order.objects.filter(user_id=req.user, payment_id=None)
+    addresses = Address.objects.filter(user_id=req.user)
+    if order_qs.exists():
+        order = order_qs[0]
+        context = {
+            "order": order,
+            "addresses": addresses,
+        }
+        return render(req, "checkout.html", context)
+    else:
+        return redirect("success") 
+
+@login_required
+def addAddress(req):
+    form = AddressForm(req.POST or None)
+    if form.is_valid():
+        address = form.save(commit=False)
+        address.user_id = req.user
+        address.save()
+        return redirect("checkout")
+    return render(req, "add_address.html", {"form": form}) 
 
 @login_required
 def applyCoupon(req):
@@ -108,3 +153,8 @@ def removeCoupon(req):
         return redirect("cart")
     else:
         return redirect("cart")
+
+
+@login_required
+def success(req):
+    return render(req, "success.html")

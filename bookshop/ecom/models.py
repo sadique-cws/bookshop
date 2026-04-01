@@ -38,6 +38,7 @@ class Book(models.Model):
 
 
 class Address(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200)
     email = models.EmailField()
     contact = models.CharField(max_length=20)

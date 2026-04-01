@@ -49,6 +49,8 @@ urlpatterns = [
     path("checkout/", checkout, name="checkout"),
     path("checkout/apply-coupon/", applyCoupon, name="apply_coupon"),
     path("checkout/remove-coupon/", removeCoupon, name="remove_coupon"),
+    path("checkout/add-address/", addAddress, name="add_address"),
+    path("checkout/success/", success, name="success"),
 
 
     
